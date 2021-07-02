@@ -88,6 +88,14 @@ df['RATING/10'] = df['RATING']/ 10
 df_negativa = df[(df['COMP_SCORES'] == 'neg') & (df['COMPOUND'] <= -0.405)]
 
 
+# Proporcao de reviews pos e neg
+reviews_pos = df[df['COMP_SCORES'] == 'pos']
+reviews_neg = df[df['COMP_SCORES'] == 'neg']
+
+print(f'Proporcao Positiva: {len(reviews_pos)/int(len(df))}')
+print(f'Proporcao Negativa: {len(reviews_neg)/int(len(df))}')
+
+
 
 # Classificacao dos reviews com MultinomialNB
 from sklearn.feature_extraction.text import CountVectorizer
