@@ -157,3 +157,5 @@ grid_search.fit(x_train, y_train)
 
 print('GridSearch CV best score: {:.4f}\n'.format(grid_search.best_score_))
 print(f'Melhores Paremetros: {grid_search.best_params_}')
+
+
