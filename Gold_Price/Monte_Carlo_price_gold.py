@@ -13,41 +13,46 @@ gold = yf.Ticker("GC=F")
 # Pegar todo o historico
 hist = gold.history(period="max")
 
+# Gráfico de linha do fechamento do preço do Ouro
 hist['Close'].plot(figsize=(15,6))
 plt.xlabel('anos', fontsize=8)
 plt.ylabel('Valores', fontsize=8)
 plt.title('Valores de Fechamento', fontsize=16)
 plt.show()
 
-
-
+# Calculo do retonro
 n = len(hist)
 x = np.linspace(1, n, n)
-coef = np.polyfit(x, hist['Close'], 1)
+coef = np.polyfit(x, hist['Close'], 1) # Tendência linear - Reta
 tendencia = coef[1]+coef[0]*x
 
 print(' Coeficientes tendencia linear y = ax + b')
 print('a = ', coef[0], 'b = ', coef[1])
 
-ax1 = plt.subplot(311)
+ax1 = plt.subplot(212)
 ax1.plot(x, hist['Close'], '-k', x, tendencia, '-k')
 ax1.fill_between(x, hist['Close'], tendencia, facecolor='gray')
-plt.xlabel('dias', fontsize=8)
+plt.xlabel('Amostras', fontsize=8)
+plt.ylabel('Valores de fechamento',fontsize=8)
+plt.title('Histórico de Fechamento do Ouro', fontsize=16)
 
-ax1 = plt.subplot(312)
+ax1 = plt.subplot(211)
 filtro = m.detrend_linear(hist['Close'])
 mi = filtro.mean()
 sigma = filtro.std()
 ax1.plot(x, filtro, '-k')
+plt.xlabel('Amostras', fontsize=8)
+plt.ylabel('Valores de fechamento',fontsize=8)
+plt.title('Gráfico da linha de tendência linear', fontsize=16)
 
-ax1=plt.subplot(313)
-ax1.hist(np.asarray(filtro, dtype='float'), bins=10, color='black', alpha=0.4)
-plt.title('Histograma da diferença entre a tendência a Gold', fontsize=8)
-xmin,xmax=plt.xlim()
-eixox=np.linspace(xmin,xmax,100)
-eixoy=norm.pdf(eixox,mi,sigma)
-ax1.plot(eixox, eixoy, '--k', linewidth=3)
-plt.xlabel('Classes para diferença entre tendican e gold', fontsize=8)
+#ax1=plt.subplot(313)
+#ax1.hist(np.asarray(filtro, dtype='float'), bins=10, color='black', alpha=0.4)
+#plt.title('Histograma da diferença entre a tendência a Gold', fontsize=8)
+#xmin,xmax=plt.xlim()
+#eixox=np.linspace(xmin,xmax,100)
+#eixoy=norm.pdf(eixox,mi,sigma)
+#ax1.plot(eixox, eixoy, '--k', linewidth=3)
+#plt.xlabel('Classes para diferença entre tendican e gold', fontsize=8)
 plt.show()
 
 # Simulacao de monte carlo
