@@ -4,8 +4,6 @@
 
 Neste exemplo, foi tomado o histórico (todas as datas) do fechamento do preço do Ouro. Deseja-se neste exemplo aplicar a simulção para analisar um movimento futuro levando em consideração a diseperção em torno de alguma tendência observada historicamente. Utilizamos aqui a tendência linear
 
-[Gráfico histórico]
-[Gráfico de tendência linear]
 
 Pode-se perceber que o valor do ouro oscilou ao redor de uma reta, mas essa oscilação é o objeto da simulação de Monte Carlo. Esse movimento errático ou oscilação da pontuação do Ouro é a diferença amostra após amostra entre o que se esperava cado os dados lineares fossem verdadeiro e o que aconteceu com o Ouro. 
 
