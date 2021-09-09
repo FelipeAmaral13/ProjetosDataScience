@@ -89,7 +89,7 @@ df_tesouro_recompra = busca_recompras_tesouro(URL_titulos_recompra)
 
 ### Analise do dataframe referente o Tesouro Direto ###
 
-def analise_tesouro(dataframe, tesouro, data):
+def analise_tesouro(dataframe, tesouro, data, graph=False):
 
     # Organizar dataframe
     dataframe.sort_index(inplace=True)
@@ -105,13 +105,18 @@ def analise_tesouro(dataframe, tesouro, data):
         sel_tesouro[sel_tesouro.columns[col]] = sel_tesouro[sel_tesouro.columns[col]].apply(lambda x: float(x.split()[0].replace(',', '.')))
     
     # Plot da colun PU Base Manha
-    sel_tesouro['PU Base Manha'].plot()
-    plt.show()
+    if graph == True:
+        sel_tesouro['PU Base Manha'].plot()
+        plt.title('PU Base Manha')
+        plt.xlabel('Data')
+        plt.ylabel('Valor R$')
+        plt.grid()
+        plt.show()
 
     return sel_tesouro
 
 # Tesouros a serem analisados
-sel_tesouro_1 = analise_tesouro(df_tesouro_direto, 'Tesouro Selic', '2024-09-01')
+sel_tesouro_1 = analise_tesouro(df_tesouro_direto, 'Tesouro Selic', '2024-09-01', graph=False)
 sel_tesouro_2 = analise_tesouro(df_tesouro_direto, 'Tesouro Prefixado', '2024-07-01')
 sel_tesouro_3 = analise_tesouro(df_tesouro_direto, 'Tesouro IPCA+', '2026-08-15')
 
@@ -148,30 +153,35 @@ def tabela_rend(url):
 df_tab_tab = tabela_rend(url_tabela_rend)
 
 # Selecionar o tesouro a ser analisado
-tabe_rend = df_tab_tab[(df_tab_tab['Títulos'] == 'Tesouro Selic') & (df_tab_tab['Vencimento'] == '01/09/2024')]
+sel_selic = df_tab_tab[(df_tab_tab['Títulos'] == 'Tesouro Selic') & (df_tab_tab['Vencimento'] == '01/09/2024')]
+
+sel_ipca = df_tab_tab[(df_tab_tab['Títulos'] == 'Tesouro IPCA+') & (df_tab_tab['Vencimento'] == '15/08/2026')]
 
 # Rendimento dos ultimos 30 dias
-rend_bruto_30 = float(tabe_rend['Últ. 30 dias'].str.replace(',', '.'))
+rend_bruto_30_selic = float(sel_selic['Últ. 30 dias'].str.replace(',', '.'))
 
+rend_bruto_30_ipca = float(sel_ipca['Últ. 30 dias'].str.replace(',', '.'))
 
 
 # Fazer o equilibrio da carteira
 
 #Valor atual investido
 valor_atual_selic = 437.40
+valor_atual_ipca = 115.32
 
 # Quantia para investimento
-qnt = 1000
+qnt = 150
 
 # Estrategia de investimento
 porc_investimento = {'Tesouro_Selic':0.50, 'Tesouro_IPCA': 0.25, 'Tesouro_prefixo': 0.25 }
 
 # Valor que investiria segunda minha estrategia (50%->Selic, 25%->IPCA, 25%->Prefixo)
 val_teorico_selic = valor_atual_selic + (qnt*porc_investimento['Tesouro_Selic'])
+val_teorico_ipca = valor_atual_ipca + (qnt*porc_investimento['Tesouro_IPCA'])
 
 # Valor do rendimento mensal do Titulo
-valor_rend_mensal = valor_atual_selic + (valor_atual_selic * rend_bruto_30/100)
-
+valor_rend_mensal_selic = valor_atual_selic + (valor_atual_selic * rend_bruto_30_selic/100)
+valor_rend_mensal_ipca =  valor_atual_ipca  + (valor_atual_ipca *  rend_bruto_30_ipca/100)
 
 
 
