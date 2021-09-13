@@ -116,9 +116,9 @@ def analise_tesouro(dataframe, tesouro, data, graph=False):
     return sel_tesouro
 
 # Tesouros a serem analisados
-sel_tesouro_1 = analise_tesouro(df_tesouro_direto, 'Tesouro Selic', '2024-09-01', graph=False)
-sel_tesouro_2 = analise_tesouro(df_tesouro_direto, 'Tesouro Prefixado', '2024-07-01', graph=False)
-sel_tesouro_3 = analise_tesouro(df_tesouro_direto, 'Tesouro IPCA+', '2026-08-15', graph=False)
+sel_tesouro_1 = analise_tesouro(df_tesouro_direto, 'Tesouro Selic', '2024-09-01', graph=True)
+sel_tesouro_2 = analise_tesouro(df_tesouro_direto, 'Tesouro Prefixado', '2024-07-01', graph=True)
+sel_tesouro_3 = analise_tesouro(df_tesouro_direto, 'Tesouro IPCA+', '2026-08-15', graph=True)
 
 
 #### Rentabilidade dos Tesouros ####
@@ -184,26 +184,29 @@ qnt = 150
 # Estrategia de investimento
 porc_investimento = {'Tesouro_Selic':0.50, 'Tesouro_IPCA': 0.25, 'Tesouro_prefixo': 0.25 }
 
-# Valor que investiria segunda minha estrategia (50%->Selic, 25%->IPCA, 25%->Prefixo)
-val_teorico_selic = valor_atual_selic + (qnt*porc_investimento['Tesouro_Selic'])
-val_teorico_ipca = valor_atual_ipca + (qnt*porc_investimento['Tesouro_IPCA'])
-val_teorico_prefixado = valor_atual_prefixado + (qnt*porc_investimento['Tesouro_prefixo'])
 
-# Valor do rendimento mensal do Titulo
-valor_rend_mensal_selic = valor_atual_selic + (valor_atual_selic * rend_bruto_30_selic/100)
-valor_rend_mensal_ipca =  valor_atual_ipca  + (valor_atual_ipca *  rend_bruto_30_ipca/100)
-valor_rend_mensal_prefixado =  valor_atual_prefixado  + (valor_atual_prefixado *  rend_bruto_30_prefixado/100)
+def balancear_carteira():
 
-# Valor a ser investido para real balanceamento
-balancear_selic = val_teorico_selic - valor_rend_mensal_selic
+    # Valor que investiria segunda minha estrategia (50%->Selic, 25%->IPCA, 25%->Prefixo)
+    val_teorico_selic = valor_atual_selic + (qnt*porc_investimento['Tesouro_Selic'])
+    val_teorico_ipca = valor_atual_ipca + (qnt*porc_investimento['Tesouro_IPCA'])
+    val_teorico_prefixado = valor_atual_prefixado + (qnt*porc_investimento['Tesouro_prefixo'])
 
-balancear_ipca = val_teorico_ipca - valor_rend_mensal_ipca
+    # Valor do rendimento mensal do Titulo
+    valor_rend_mensal_selic = valor_atual_selic + (valor_atual_selic * rend_bruto_30_selic/100)
+    valor_rend_mensal_ipca =  valor_atual_ipca  + (valor_atual_ipca *  rend_bruto_30_ipca/100)
+    valor_rend_mensal_prefixado =  valor_atual_prefixado  + (valor_atual_prefixado *  rend_bruto_30_prefixado/100)
 
-balancear_prefixado = val_teorico_prefixado - valor_rend_mensal_prefixado
+    # Valor a ser investido para real balanceamento
+    balancear_selic = val_teorico_selic - valor_rend_mensal_selic
 
-print(f'Deverá ser investido nesse mês a quantia de: {balancear_selic} no Tesouro Selic\n')
-print(f'Deverá ser investido nesse mês a quantia de: {balancear_ipca} no Tesouro IPCA+\n')
-print(f'Deverá ser investido nesse mês a quantia de: {balancear_prefixado} no Tesouro Prefixado\n')
+    balancear_ipca = val_teorico_ipca - valor_rend_mensal_ipca
+
+    balancear_prefixado = val_teorico_prefixado - valor_rend_mensal_prefixado
+
+    print(f'Deverá ser investido nesse mês a quantia de: {balancear_selic} no Tesouro Selic\n')
+    print(f'Deverá ser investido nesse mês a quantia de: {balancear_ipca} no Tesouro IPCA+\n')
+    print(f'Deverá ser investido nesse mês a quantia de: {balancear_prefixado} no Tesouro Prefixado\n')
 
 
 
