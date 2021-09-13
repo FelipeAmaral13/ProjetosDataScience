@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from seaborn.rcmod import set_style
 import yfinance as yf
+from mplfinance import candlestick_ohcl
 
 # Ticket
 gold = yf.Ticker("GC=F")

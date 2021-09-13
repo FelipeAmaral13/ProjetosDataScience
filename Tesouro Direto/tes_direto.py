@@ -117,8 +117,11 @@ def analise_tesouro(dataframe, tesouro, data, graph=False):
 
 # Tesouros a serem analisados
 sel_tesouro_1 = analise_tesouro(df_tesouro_direto, 'Tesouro Selic', '2024-09-01', graph=False)
-sel_tesouro_2 = analise_tesouro(df_tesouro_direto, 'Tesouro Prefixado', '2024-07-01')
-sel_tesouro_3 = analise_tesouro(df_tesouro_direto, 'Tesouro IPCA+', '2026-08-15')
+sel_tesouro_2 = analise_tesouro(df_tesouro_direto, 'Tesouro Prefixado', '2024-07-01', graph=False)
+sel_tesouro_3 = analise_tesouro(df_tesouro_direto, 'Tesouro IPCA+', '2026-08-15', graph=False)
+
+
+#### Rentabilidade dos Tesouros ####
 
 # Request da tabela de rentabiblidade dos tesouros
 url_tabela_rend = 'https://apiapex.tesouro.gov.br/aria/v1/sistd/custom/ultimaRentabilidadeCSV'
@@ -157,10 +160,15 @@ sel_selic = df_tab_tab[(df_tab_tab['Títulos'] == 'Tesouro Selic') & (df_tab_tab
 
 sel_ipca = df_tab_tab[(df_tab_tab['Títulos'] == 'Tesouro IPCA+') & (df_tab_tab['Vencimento'] == '15/08/2026')]
 
+sel_prefixado = df_tab_tab[(df_tab_tab['Títulos'] == 'Tesouro Prefixado') & (df_tab_tab['Vencimento'] == '01/07/2024')]
+
+
 # Rendimento dos ultimos 30 dias
 rend_bruto_30_selic = float(sel_selic['Últ. 30 dias'].str.replace(',', '.'))
 
 rend_bruto_30_ipca = float(sel_ipca['Últ. 30 dias'].str.replace(',', '.'))
+
+rend_bruto_30_prefixado = float(sel_prefixado['Últ. 30 dias'].str.replace(',', '.'))
 
 
 # Fazer o equilibrio da carteira
@@ -168,6 +176,7 @@ rend_bruto_30_ipca = float(sel_ipca['Últ. 30 dias'].str.replace(',', '.'))
 #Valor atual investido
 valor_atual_selic = 437.40
 valor_atual_ipca = 115.32
+valor_atual_prefixado = 121.89
 
 # Quantia para investimento
 qnt = 150
@@ -178,13 +187,23 @@ porc_investimento = {'Tesouro_Selic':0.50, 'Tesouro_IPCA': 0.25, 'Tesouro_prefix
 # Valor que investiria segunda minha estrategia (50%->Selic, 25%->IPCA, 25%->Prefixo)
 val_teorico_selic = valor_atual_selic + (qnt*porc_investimento['Tesouro_Selic'])
 val_teorico_ipca = valor_atual_ipca + (qnt*porc_investimento['Tesouro_IPCA'])
+val_teorico_prefixado = valor_atual_prefixado + (qnt*porc_investimento['Tesouro_prefixo'])
 
 # Valor do rendimento mensal do Titulo
 valor_rend_mensal_selic = valor_atual_selic + (valor_atual_selic * rend_bruto_30_selic/100)
 valor_rend_mensal_ipca =  valor_atual_ipca  + (valor_atual_ipca *  rend_bruto_30_ipca/100)
+valor_rend_mensal_prefixado =  valor_atual_prefixado  + (valor_atual_prefixado *  rend_bruto_30_prefixado/100)
 
+# Valor a ser investido para real balanceamento
+balancear_selic = val_teorico_selic - valor_rend_mensal_selic
 
+balancear_ipca = val_teorico_ipca - valor_rend_mensal_ipca
 
+balancear_prefixado = val_teorico_prefixado - valor_rend_mensal_prefixado
+
+print(f'Deverá ser investido nesse mês a quantia de: {balancear_selic} no Tesouro Selic\n')
+print(f'Deverá ser investido nesse mês a quantia de: {balancear_ipca} no Tesouro IPCA+\n')
+print(f'Deverá ser investido nesse mês a quantia de: {balancear_prefixado} no Tesouro Prefixado\n')
 
 
 
