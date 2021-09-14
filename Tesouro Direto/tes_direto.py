@@ -20,6 +20,7 @@ URL_titulos_recompra = "https://www.tesourotransparente.gov.br/ckan/dataset/f30d
 df_td = [] # Vetor dos titulos do tesouro direto
 
 def busca_tit_tesouro_direto(url):
+    '''Função para obter os titulos do tesouro direto'''
 
     global df_td
 
@@ -56,6 +57,7 @@ def busca_tit_tesouro_direto(url):
 
 
 def busca_venda_tesouro(url):
+    '''Função para obter os o preço de vendas dos títulos do tesouro direto'''
 
     # Ler o csv capturado
     df  = pd.read_csv(url, sep=';', decimal=',')
@@ -73,11 +75,19 @@ def busca_venda_tesouro(url):
     return df_tesouro_direto_venda
 
 def busca_recompras_tesouro(url):
+    '''Função para obter os o preço de recompras dos títulos do tesouro direto '''
 
+    # Ler o csv capturado
     df  = pd.read_csv(url, sep=';', decimal=',')
+
+    # Transformar colunas em datetime
     df['Vencimento do Titulo'] = pd.to_datetime(df['Vencimento do Titulo'], dayfirst=True)
     df['Data Resgate']       = pd.to_datetime(df['Data Resgate'], dayfirst=True)
+
+    # Organizar o dataframe
     multi_indice = pd.MultiIndex.from_frame(df.iloc[:, :3])
+
+    # Setar o index pelos tipos de tesouro direto
     df_tesouro_recompra = df.set_index(multi_indice).iloc[: , 3:]  
     
     return df_tesouro_recompra
@@ -107,7 +117,7 @@ def analise_tesouro(dataframe, tesouro, data, graph=False):
     # Plot da colun PU Base Manha
     if graph == True:
         sel_tesouro['PU Base Manha'].plot()
-        plt.title('PU Base Manha')
+        plt.title(f'{tesouro} - PU Base Manha')
         plt.xlabel('Data')
         plt.ylabel('Valor R$')
         plt.grid()
@@ -130,6 +140,8 @@ url_tabela_rend = 'https://apiapex.tesouro.gov.br/aria/v1/sistd/custom/ultimaRen
 tab_rend = []
 
 def tabela_rend(url):
+
+    '''Função para obter a rentabilidade dos tesouros diretos'''
 
     # Request da url
     r = requests.get(url)
@@ -157,51 +169,37 @@ df_tab_tab = tabela_rend(url_tabela_rend)
 
 # Selecionar o tesouro a ser analisado
 sel_selic = df_tab_tab[(df_tab_tab['Títulos'] == 'Tesouro Selic') & (df_tab_tab['Vencimento'] == '01/09/2024')]
-
 sel_ipca = df_tab_tab[(df_tab_tab['Títulos'] == 'Tesouro IPCA+') & (df_tab_tab['Vencimento'] == '15/08/2026')]
-
 sel_prefixado = df_tab_tab[(df_tab_tab['Títulos'] == 'Tesouro Prefixado') & (df_tab_tab['Vencimento'] == '01/07/2024')]
 
 
-# Rendimento dos ultimos 30 dias
+# Rendimento dos ultimos 30 dias. Trocar o ',' por '.'
 rend_bruto_30_selic = float(sel_selic['Últ. 30 dias'].str.replace(',', '.'))
-
 rend_bruto_30_ipca = float(sel_ipca['Últ. 30 dias'].str.replace(',', '.'))
-
 rend_bruto_30_prefixado = float(sel_prefixado['Últ. 30 dias'].str.replace(',', '.'))
 
 
-# Fazer o equilibrio da carteira
+### Fazer o equilibrio da carteira ###
 
-#Valor atual investido
-valor_atual_selic = 437.40
-valor_atual_ipca = 115.32
-valor_atual_prefixado = 121.89
-
-# Quantia para investimento
-qnt = 150
-
-# Estrategia de investimento
+# Estrategia de investimento - Tesouro:%
 porc_investimento = {'Tesouro_Selic':0.50, 'Tesouro_IPCA': 0.25, 'Tesouro_prefixo': 0.25 }
 
 
-def balancear_carteira():
+def balancear_carteira(valor_selic:float, valor_ipca:float, valor_prefixado:float, qntia_investir:float):
 
     # Valor que investiria segunda minha estrategia (50%->Selic, 25%->IPCA, 25%->Prefixo)
-    val_teorico_selic = valor_atual_selic + (qnt*porc_investimento['Tesouro_Selic'])
-    val_teorico_ipca = valor_atual_ipca + (qnt*porc_investimento['Tesouro_IPCA'])
-    val_teorico_prefixado = valor_atual_prefixado + (qnt*porc_investimento['Tesouro_prefixo'])
+    val_teorico_selic = valor_selic + (qntia_investir *porc_investimento['Tesouro_Selic'])
+    val_teorico_ipca = valor_ipca + (qntia_investir *porc_investimento['Tesouro_IPCA'])
+    val_teorico_prefixado = valor_prefixado + (qntia_investir *porc_investimento['Tesouro_prefixo'])
 
     # Valor do rendimento mensal do Titulo
-    valor_rend_mensal_selic = valor_atual_selic + (valor_atual_selic * rend_bruto_30_selic/100)
-    valor_rend_mensal_ipca =  valor_atual_ipca  + (valor_atual_ipca *  rend_bruto_30_ipca/100)
-    valor_rend_mensal_prefixado =  valor_atual_prefixado  + (valor_atual_prefixado *  rend_bruto_30_prefixado/100)
+    valor_rend_mensal_selic = valor_selic + (valor_selic * rend_bruto_30_selic/100)
+    valor_rend_mensal_ipca =  valor_ipca  + (valor_ipca *  rend_bruto_30_ipca/100)
+    valor_rend_mensal_prefixado =  valor_prefixado  + (valor_prefixado *  rend_bruto_30_prefixado/100)
 
     # Valor a ser investido para real balanceamento
     balancear_selic = val_teorico_selic - valor_rend_mensal_selic
-
     balancear_ipca = val_teorico_ipca - valor_rend_mensal_ipca
-
     balancear_prefixado = val_teorico_prefixado - valor_rend_mensal_prefixado
 
     print(f'Deverá ser investido nesse mês a quantia de: {balancear_selic} no Tesouro Selic\n')
@@ -209,7 +207,7 @@ def balancear_carteira():
     print(f'Deverá ser investido nesse mês a quantia de: {balancear_prefixado} no Tesouro Prefixado\n')
 
 
-
+balancear_carteira(valor_selic=437.40, valor_ipca=115.32, valor_prefixado=121.89, qntia_investir=150)
 
 
 
