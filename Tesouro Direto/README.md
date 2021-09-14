@@ -2,7 +2,7 @@
 
 O objetivo desse projeto é realizar o balaceamento da carteira de investimento do Tesouro Direto. 
 É feita uma raspagem de dados colentando dos titulos do Tesouro direto, as vendas ocorridas e a recompras realizadas, todas essas informações obtidas pelo site:
-![https://www.tesourotransparente.gov.br](https://www.tesourotransparente.gov.br)
+[https://www.tesourotransparente.gov.br](https://www.tesourotransparente.gov.br)
 
 
 ### Gráfico de Vendas dos Preços Unitários dos Títulos
