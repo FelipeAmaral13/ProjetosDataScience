@@ -42,8 +42,7 @@ class Bot():
         self.chat_id = chat_id
 
 
-#token = '1733127358:AAGFj2Yk3_1Pd6de_JW7FWLA7KYVf82RHLU'
-#chat_id = -472930056
+
 
 #masterclassdsbot = Bot(token=token)
 #masterclassdsbot.setChatId(chat_id)
