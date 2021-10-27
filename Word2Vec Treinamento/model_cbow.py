@@ -10,10 +10,9 @@ nlp = spacy.load("pt_core_news_sm", disable=["paser", "ner", "tagger", "textcat"
 
 w2v_modelo_cbow = KeyedVectors.load_word2vec_format(os.path.join(os.getcwd(), 'modelo_cbow.txt'))
 
-type(w2v_modelo_cbow)
-
-artigo_treino = pd.read_csv(os.path.join(os.getcwd(), "treino.csv"))
-artigo_teste = pd.read_csv(os.path.join(os.getcwd(), "teste.csv"))
+dados_treino = pd.read_csv(os.path.join(os.getcwd(), 'articles.csv'))
+artigo_treino = dados_treino[0:116938]
+artigo_teste = dados_treino[116938:]
 
 def tokenizador(texto:str)->list():
     """
