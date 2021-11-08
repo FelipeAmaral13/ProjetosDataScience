@@ -1,6 +1,6 @@
 # Deploy Flask
 
-Projeto simples para fazer o deploy, através de uma API, de um modelo de ML para pedição de ataque cardiáco.
+Projeto simples para fazer o deploy, através de uma API, de um modelo de ML para pedição de ataque cardíaco.
 
 ## Info:
 
