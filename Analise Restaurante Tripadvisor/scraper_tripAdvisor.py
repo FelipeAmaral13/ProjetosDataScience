@@ -6,7 +6,6 @@ from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import WebDriverException, NoSuchElementException, TimeoutException, ElementClickInterceptedException, StaleElementReferenceException
 import time
 import os
-from pathlib import Path
 
 
 # Caminho
@@ -35,12 +34,13 @@ csvWriter = []
 
 for i in range(0, num_page):
     print(f'Pag: {i+1}')
-    
-    # Expandir o Review 
+
+    # Expandir o Review
     time.sleep(2)
     try:
-        driver.find_element_by_xpath("//span[@class='taLnk ulBlueLinks']").click()
-    except (WebDriverException, NoSuchElementException, TimeoutException, ElementClickInterceptedException, StaleElementReferenceException)  as e :
+        driver.find_element_by_xpath(
+            "//span[@class='taLnk ulBlueLinks']").click()
+    except (WebDriverException, NoSuchElementException, TimeoutException, ElementClickInterceptedException, StaleElementReferenceException):
         print('Sem expandir')
     container = driver.find_elements_by_xpath(".//div[@class='review-container']")
 
@@ -73,7 +73,5 @@ driver.close()
 
 df = pd.DataFrame(csvWriter, columns=['DATA', 'RATING', 'TITULO', 'REVIEW'])
 
-### ENCODING
+# ENCODING
 df.to_csv('TripAdvisor.csv', sep=';')
-
-
