@@ -2,7 +2,8 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import r2_score
+from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error,\
+    median_absolute_error
 import pickle
 import numpy as np
 
@@ -18,6 +19,9 @@ regressao = clf.fit(X_Reshaped, y)
 predict = clf.predict(X_Reshaped)
 
 print(f'Slope = {clf.coef_[0]} e Intercept = {clf.intercept_}')
+print(f'MAE - {mean_absolute_error(y, predict)}')
+print(f'MSE - {mean_squared_error(y, predict)}')
+print(f'MedAE - {median_absolute_error(y, predict)}')
 print(f'Coef. de Determinacao (R2): {r2_score(y, predict)}')
 
 y_teste = clf.predict(np.array(3741).reshape(-1, 1))
