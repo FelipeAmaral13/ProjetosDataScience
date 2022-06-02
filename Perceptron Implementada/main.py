@@ -1,14 +1,17 @@
 import numpy as np
-from sklearn.datasets import load_breast_cancer
+from sklearn.datasets import load_boston
 from sklearn.utils import shuffle, resample
 from RNA_scracth import Input, Linear, Sigmoid, MSE, topological_sort, forward_and_backward, sgd_update
 
 # Carrega os dados
-data = load_breast_cancer()
+data = load_boston()
+
 
 # Variáveis de entrada e saída para treinamento supervisionado
-X_ = data['data']
-y_ = data['target']
+X_ = data['data'][0:int(np.floor(len(data.data)*0.7))]
+y_ = data['target'][0:int(np.floor(len(data.target)*0.7))]
+
+X_test = data['data'][int(np.floor(len(data.data)*0.7)):]
 
 # Normaliza os dados
 X_ = (X_ - np.mean(X_, axis = 0)) / np.std(X_, axis = 0)
