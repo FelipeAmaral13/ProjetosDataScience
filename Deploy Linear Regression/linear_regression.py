@@ -2,40 +2,49 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error,\
     median_absolute_error
 import pickle
 import numpy as np
 
-df = pd.read_csv(os.path.join('data', 'headbrain.csv'), sep=',')
+# df = pd.read_csv(os.path.join('data', 'headbrain.csv'), sep=',')
+df = pd.read_csv(os.path.join('data', 'dataset.csv'))
 
-X = df['HeadSize'].values
-y = df['BrainWeight'].values
+
+# Preparando os dados
+X = df.iloc[:, :-1].values
+y = df.iloc[:, 1].values
+
+X_treino, X_teste, y_treino, y_teste = train_test_split(X, y, test_size=0.3, random_state=0)
+X_treino = X_treino.reshape(-1, 1).astype(np.float32)
+
 
 clf = LinearRegression()
-X_Reshaped = X.reshape((-1, 1))
-regressao = clf.fit(X_Reshaped, y)
+regressao = clf.fit(X_treino, y_treino)
 
-predict = clf.predict(X_Reshaped)
+print("\n")
+print('B1 (coef_) :', clf.coef_)
+print('B0 (intercept_) :', clf.intercept_)
 
-print(f'Slope = {clf.coef_[0]} e Intercept = {clf.intercept_}')
-print(f'MAE - {mean_absolute_error(y, predict)}')
-print(f'MSE - {mean_squared_error(y, predict)}')
-print(f'MedAE - {median_absolute_error(y, predict)}')
-print(f'Coef. de Determinacao (R2): {r2_score(y, predict)}')
 
-y_teste = clf.predict(np.array(3741).reshape(-1, 1))
-# y = b0 + b1x -> y-b0 = b1x -> y-b0/b1 = x
-ponto = (y_teste - clf.intercept_)/clf.coef_[0]
-
-plt.figure(figsize=(16, 8), dpi=100)
-plt.scatter(X, y, color='gray')
-plt.plot(X, predict, color='red', linewidth=2)
-plt.scatter(ponto[0], y_teste, color='blue')
-plt.xlabel('Head Size(cm^3')
-plt.ylabel('Brain Weight(grams)')
+regression_line = clf.coef_ * X + clf.intercept_
+plt.scatter(X, y)
+plt.title('Invetimento x Retorno')
+plt.xlabel('Investimento')
+plt.ylabel('Retorno Previsto')
+plt.plot(X, regression_line, color='red')
 plt.show()
 
+
+y_pred = clf.predict(X_teste)
+# predict = clf.predict(X_Reshaped)
+
+print(f'Slope = {clf.coef_[0]} e Intercept = {clf.intercept_}')
+print(f'MAE - {mean_absolute_error(y_teste, y_pred)}')
+print(f'MSE - {mean_squared_error(y_teste, y_pred)}')
+print(f'MedAE - {median_absolute_error(y_teste, y_pred)}')
+print(f'Coef. de Determinacao (R2): {r2_score(y_teste, y_pred)}')
 
 Pkl_Filename = os.path.join('model', 'Pickle_RL_Model.pkl')
 
