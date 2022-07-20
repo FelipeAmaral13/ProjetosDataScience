@@ -18,7 +18,7 @@ def index():
 # Página com resultado da previsão
 @app.route("/estimate", methods = ["POST"])
 def estimate():
-    values = request.form.getlist('new_car')
+    values = request.form.getlist('new_heart')
     print(values)
     car = Heart(values)
     value_to_predict = car.prepare()
