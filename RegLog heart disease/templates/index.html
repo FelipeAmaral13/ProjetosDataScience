@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lab Deploy na Prática</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="./static/style.css">
+</head>
+
+<div>
+    <div class="container">
+        <h1>Previsão de possibilidade de ataque cardíaco</h1>
+        {% if result %}
+        <h3>Possibilidade de Ataque Cardíaco: {{result}}</h3>
+        <a href="/">Estimar Novamente</a>
+        {% endif %}
+        {% if result == None %}
+        <form action = "/estimate" method = "POST">
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="col">
+                        <label>Valores possíveis: 1 -> inf</label>
+                        <input type="text" class="form-control form-control-sm" name="new_car" placeholder="Idade" required>
+                    </div>
+                    <div class="col">
+                        <label>Valores possíveis: 1->Masc 0->Fem</label>
+                        <input type="text" class="form-control form-control-sm" name="new_car" placeholder="Sexo" required>
+                    </div>
+                    <div class="col">
+                        <label>Valores possíveis: 0-3</label>
+                        <input type="text" class="form-control form-control-sm" name="new_car" placeholder="Tipo de dor no peito (4 valores)" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="col">
+                        <label>Valores possíveis: 90 - 200</label>
+                        <input type="text" class="form-control form-control-sm" name="new_car" placeholder="Pressão arterial em repouso" required>
+                    </div>
+                    <div class="col">
+                        <label>Valores possíveis: 120 - 565</label>
+                        <input type="text" class="form-control form-control-sm" name="new_car" placeholder="Colesterol sérico em mg/dl" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="col">
+                        <label>Valores possíveis: 0 ou 1</label>
+                        <input type="text" class="form-control form-control-sm" name="new_car" placeholder="Glicemia em jejum > 120 mg/dl" required>
+                    </div>
+                    <div class="col">
+                        <label>Valores possíveis: 0,1,2</label>
+                        <input type="text" class="form-control form-control-sm" name="new_car" placeholder="Resultados eletrocardiográficos em repouso" required>
+                    </div>
+                    <div class="col">
+                        <label>Valores possíveis: 70-205</label>
+                        <input type="text" class="form-control form-control-sm" name="new_car" placeholder="Frequência cardíaca máxima atingida" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="col">
+                        <label>Valores possíveis: 0 ou 1</label>
+                        <input type="text" class="form-control form-control-sm" name="new_car" placeholder="Angina induzida por exercício" required>
+                    </div>
+                    <div class="col">
+                        <label>Valores possíveis: 0.0-7.0</label>
+                        <input type="text" class="form-control form-control-sm" name="new_car" placeholder="pico antigo = depressão do segmento ST induzida pelo exercício em relação ao repouso" required>
+                    </div>
+                    <div class="col">
+                        <label>Valores possíveis: 0-2</label>
+                        <input type="text" class="form-control form-control-sm" name="new_car" placeholder="Inclinação do segmento ST de exercício de pico" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="col">
+                        <label>Valores possíveis: 0-3</label>
+                        <input type="text" class="form-control form-control-sm" name="new_car" placeholder="número de vasos principais (0-3) coloridos por fluorosopia" required>
+                    </div>
+                    <div class="col">
+                        <label>Valores possíveis: 0,1,2</label>
+                        <input type="text" class="form-control form-control-sm" name="new_car" placeholder="thal: 0 = normal;  1 = defeito corrigido;  2 = defeito reversível" required>
+                    </div>
+                </div>
+            </div>
+
+            
+            
+            <button type="submit" class="btn btn-primary">Estimar</button>
+        </form>
+        {% endif %}
+    </div>
+    </body>
+
+</html>
