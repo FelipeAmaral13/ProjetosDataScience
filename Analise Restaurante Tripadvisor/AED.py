@@ -6,6 +6,8 @@ import os
 # Lendo o banco de dados
 df = pd.read_csv(os.path.join('data', 'TripAdvisor.csv'), sep=';')
 
+#teste
+
 # Informacoes basicas
 df.info()
 df.isnull().sum()
