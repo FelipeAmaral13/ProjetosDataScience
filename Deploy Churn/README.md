@@ -1,4 +1,4 @@
-# Projeto 2 - Prevendo o Churn de Alunos com RandomForest
+# Prevendo o Churn de Alunos com RandomForest
 
 Este projeto visa prever a evasão de alunos (churn) em um contexto educacional. Ele utiliza o algoritmo Random Forest e calibrações de probabilidade para melhorar a acurácia das previsões. O projeto é composto por um notebook de análise, um script de deploy em Streamlit e um dataset para treino e teste.
 
