@@ -31,6 +31,7 @@ O dataset **student_churn_dataset.csv** possui as seguintes colunas:
 1. Abra o notebook **Projeto_churn_aluno.ipynb** para visualizar a análise exploratória de dados, o treinamento e a calibração do modelo.
 2. O notebook apresenta as métricas de Brier Score e Log Loss para avaliar a calibração antes e depois de aplicar o Platt Scaling e a Isotonic Regression.
 3. A partir dessa análise, o modelo mais calibrado é salvo para ser utilizado no deploy.
+   
 
 ### Deploy do Modelo com Streamlit
 
